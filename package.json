@@ -1,0 +1,17 @@
+{
+  "name": "abel_",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^12.3.1",
+    "erela.js": "^2.0.1",
+    "parse-ms": "^2.1.0"
+  }
+}
