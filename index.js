@@ -31,6 +31,7 @@ client.manager = new Manager({
         const guild = client.guilds.cache.get(id);
         if (guild) guild.shard.send(payload);
     },
+    selfDeafen: true
 })
 .on("nodeConnect", node => console.log(`Connected to node ${node.options.identifier}.`))
 .on("nodeError", (err) => {

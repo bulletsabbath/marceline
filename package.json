@@ -12,6 +12,8 @@
   "dependencies": {
     "discord.js": "^12.3.1",
     "erela.js": "^2.0.1",
+    "erela.js-spotify": "github:Solaris9/erela.js-spotify#build",
+    "genius-lyrics-api": "^3.0.3",
     "parse-ms": "^2.1.0"
   }
 }

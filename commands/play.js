@@ -37,7 +37,7 @@ module.exports = {
             }
         } catch (e) {
             message.channel.send("Oopsie doodles! Something went VERY wrong on our side. Don't worry, this has been reported to our devs!");
-            return reportError(client, e.message);
+            return reportError(client, e);
         }
 
         switch (res.loadType) {

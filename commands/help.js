@@ -8,7 +8,7 @@ module.exports = {
         const embed = new MessageEmbed()
         .setColor("RANDOM");
 
-        if (!args) {
+        if (!args[0]) {
             embed
             //awful descriptions go BRRRRRRRRRRR
             .setDescription(`
@@ -19,21 +19,23 @@ module.exports = {
                 \`play\` - plays the song you want!
                 \`queue\` - shows the current queue
             `)
-            .setFooter("i like ya cut g *SLAP*!!!!")
+            .setFooter("footer go brr")
             message.channel.send(embed);
         }
 
-        if (args) {
-            let command = args[0];
-            if (!client.commands.has(command) && !client.aliases.has(command)) return;
+        if (args[0]) {
+            let command = args[0].toLowerCase();
+            if (!client.commands.has(command) && !client.aliases.has(command)) return message.channel.send("That ain't no valid command, king/queen!");
+            command = client.commands.get(command) || client.aliases.get(command);
             embed
-            .setTitle(`${command.toLowerCase()}`)
+            .setTitle(`${command.name}`)
             .setDescription(`
-            ;; - ***description*** - ,, ${command.description}
-            ;; - ***aliases*** - ,, ${command.aliases.join(", ") || "none"}
+            ;; - ***description*** - ,, ${command.description || "no ~~useless~~ description"}
+            ;; - ***aliases*** - ,, ${"test" || "none"}
             `)
             .setFooter("...and i put a whole bag of jellybeans up my ass")
+            console.log(command);
             message.channel.send(embed);
-        } else message.channel.send("That ain't no valid command, king/queen!");
+        }
     }
 }
