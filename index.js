@@ -6,6 +6,8 @@ const client = new Client({
 });
 const embed = new MessageEmbed()
 .setColor("RANDOM")
+const Spotify = require("erela.js-spotify");
+const { config } = require("process");
 
 client.config = require("./config.json");
 client.commands = new Collection();
@@ -25,13 +27,16 @@ client.on("raw", (d) => client.manager.updateVoiceState(d));
 
 client.manager = new Manager({
     nodes: client.config.nodes,
-    selfDeafen: true,
     autoPlay: true,
     send(id, payload) {
         const guild = client.guilds.cache.get(id);
         if (guild) guild.shard.send(payload);
     },
-    selfDeafen: true
+    /*plugins: [ new Spotify({
+        clientID: client.config.clientID,
+        clientSecret: client.config.clientSecret
+    })]
+    */
 })
 .on("nodeConnect", node => console.log(`Connected to node ${node.options.identifier}.`))
 .on("nodeError", (err) => {
@@ -52,14 +57,17 @@ client.manager = new Manager({
     .setFooter("24/7 is not available yet so whether you like it or not I'm leaving!")
 
     channel.send(embed);
-    const timeout = setTimeout(() => player.destroy(), 60000);
-    clearTimeout(timeout);
+    setTimeout(() => player.destroy(), 60000);
 });
 
 
 client.once("ready", () => {
     client.manager.init(client.user.id);
     console.log("Ready to rock 'n roll!");
+    client.user.setStatus("idle");
+    setInterval(() => {
+        client.user.setActivity(`songs for ${client.manager.players.size} guild(s)!`);
+    }, 10000);
 })
 
 client.on("message", message => {

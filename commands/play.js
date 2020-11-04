@@ -30,10 +30,7 @@ module.exports = {
             if (res.loadType == "LOAD_FAILED") {
                 message.channel.send("Oopsie doodles! Something went VERY wrong on our side. Don't worry, this has been reported to our devs!");
                 reportError(client, res.exception.message);
-                const timeout = setTimeout(() => {
-                    player.destroy();
-                }, 60000);
-                clearTimeout(timeout);
+                setTimeout(() => player.destroy(), 60000);
             }
         } catch (e) {
             message.channel.send("Oopsie doodles! Something went VERY wrong on our side. Don't worry, this has been reported to our devs!");
@@ -43,11 +40,9 @@ module.exports = {
         switch (res.loadType) {
             case "NO_MATCHES":
                 if (!player.queue.current) {
-                    const timeout = setTimeout(() => player.destroy(), 60000);
-                    clearTimeout(timeout);
+                    setTimeout(() => player.destroy(), 60000);
                 }
-                message.channel.send(embed.setDescription("Couldn't find any songs! Try something else maybe?"));
-                break;
+                return message.channel.send(embed.setDescription("Couldn't find any songs! Try something else maybe?"));
         
             case "TRACK_LOADED":
             case "SEARCH_RESULT":

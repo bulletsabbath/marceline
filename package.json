@@ -11,8 +11,8 @@
   "license": "MIT",
   "dependencies": {
     "discord.js": "^12.3.1",
-    "erela.js": "^2.0.1",
-    "erela.js-spotify": "github:Solaris9/erela.js-spotify#build",
+    "erela.js": "^2.1.1",
+    "erela.js-spotify": "^1.1.0",
     "genius-lyrics-api": "^3.0.3",
     "parse-ms": "^2.1.0"
   }
