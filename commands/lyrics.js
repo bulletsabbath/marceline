@@ -1,72 +1,43 @@
 const { MessageEmbed } = require("discord.js");
-const { getSong } = require("genius-lyrics-api");
+const lyricsFinder = require("lyrics-finder");
+const { reportError } = require("../utils/functions");
 
 module.exports = {
     name: "lyrics",
     aliases: ["ly"],
     description: "Leerixs",
     run: async (client, message) => {
-        const player = client.manager.players.get(message.guild.id);
+        const player = client.manager.get(message.guild.id);
         const req = player.queue.current;
 
-        if (!req) {
-            getSong({
-                apiKey: client.config.apiKey,
-                title: req.title,
-                artist: req.author || "",
-                optimizeQuery: true
-            })
-            .then(song => {
-                if (!song) return message.channel.send(`No lyrics found for \`${req.title}\``);
+        if (!req) return message.channel.send("There is no song playing in this guild!");
+        if (!player) return message.channel.send("There is no player in this guild!");
         
-                if (song.lyrics.length >= 2048) {
-                    let lyrics = song.lyrics.split(" ");
-                    let first = lyrics.slice(0, 200).join(" ");
-                    let second = lyrics.slice(200, lyrics.length - 1).join(" ");
+        let lyrics;
+
+        try {
+            lyrics = await lyricsFinder(req.title, req.author);
+            if (!lyrics) return message.channel.send(`No lyrics found for \`${req.title}\`!`);
+        } catch (e) {
+            message.channel.send("Couldn't find lyrics at this time! Try again later.");
+            reportError(client, message.guild, e, "In lyrics command: Couldn't search for lyrics");
+        }
+
+        if (lyrics >= 2048) {
+            lyrics = lyrics.split(" ");
+            let first = lyrics.slice(0, 200).join(" ");
+            let second = lyrics.slice(200, lyrics.length - 1).join(" ");
+
+            let embed = new MessageEmbed()
+            .setColor("RANDOM")
+            .setTitle(`${req.title} by ${req.author}`)
+            .setDescription(first)
     
-                    const embed1 = new MessageEmbed()
-                    .setColor("RANDOM")
-                    .setTitle(req.title)
-                    .setThumbnail(song.albumArt)
-                    .setDescription(first);
-    
-                    const embed2 = new MessageEmbed() 
-                    .setColor("RANDOM")
-                    .setDescription(second)
-                    .setFooter("Powered by Genius API");
-                    message.channel.send(embed1);
-                    message.channel.send(embed2);
-                }
-            })
-        } else {
-            getSong({
-                apiKey: client.conig.apiKey,
-                title: args[0],
-                artist: args[1] || "",
-                optimizeQuery: true
-            })
-            .then(song => {
-                if (!song) return message.channel.send(`No lyrics found for \`${req.title}\``);
-        
-                if (song.lyrics.length >= 2048) {
-                    let lyrics = song.lyrics.split(" ");
-                    let first = lyrics.slice(0, 200).join(" ");
-                    let second = lyrics.slice(200, lyrics.length - 1).join(" ");
-    
-                    const embed1 = new MessageEmbed()
-                    .setColor("RANDOM")
-                    .setTitle(req.title)
-                    .setThumbnail(song.albumArt)
-                    .setDescription(first);
-    
-                    const embed2 = new MessageEmbed() 
-                    .setColor("RANDOM")
-                    .setDescription(second)
-                    .setFooter("Powered by Genius API");
-                    message.channel.send(embed1);
-                    message.channel.send(embed2);
-                }
-            })
+            let embed1 = new MessageEmbed()
+            .setColor("RANDOM")
+            .setDescription(second)
+            message.channel.send(embed);
+            message.channel.send(embed1);
         }
     }
 }

@@ -11,17 +11,17 @@ module.exports = {
         if (!args.length) return message.channel.send("you dumbfuck give me a command to reload");
 
         let command = client.commands.get(args[0].toLowerCase()) || client.commands.get(client.aliases.get(args[0].toLowerCase()));
+        console.log(command);
         if (!command) return message.channel.send("there is no command like that fab, you out of all people should know that smh");
 
         try {
-            delete require.cache[require.resolve(`./${command}.js`)];
-            const pull = require(`./${command}.js`);
-            client.commands.set(pull.name, pull);
-            client.aliases.set(pull.aliases, pull.name);
+            delete require.cache[require.resolve(`./${command.name}.js`)];
+            client.commands.set(command.name, command);
+            client.aliases.set(command.aliases, command.name);
             message.channel.send("Successfully reloaded command");
         } catch(e) {
             message.channel.send("oopsie woopsies couldn't reload commandchecklogsformoreinfoBYEEEEEEEEEEEEEE");
-            reportError(client, message.guild, error, "In reload command: Couldn't delete require cache.");
+            reportError(client, message.guild, e, "In reload command: Couldn't delete require cache.");
         }
     }
 }

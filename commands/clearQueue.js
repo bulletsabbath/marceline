@@ -36,8 +36,8 @@ module.exports = {
         try {
             message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
             .then(collected => {
-                if (collected.emoji === `✅`) player.queue.clear();
-                else if (collected.emoji === `❎`) message.channel.send("Okie dokie, cancelled command!");
+                if (collected.emoji.name == `✅`) player.queue.clear();
+                else if (collected.emoji.name == `❎`) message.channel.send("Okie dokie, cancelled command!");
                 console.log(collected);
             })
 

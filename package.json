@@ -13,8 +13,8 @@
     "discord.js": "^12.3.1",
     "erela.js": "^2.2.0",
     "erela.js-spotify": "^1.2.0",
-    "genius-lyrics-api": "^3.0.3",
     "ksoft.js": "^3.1.4",
+    "lyrics-finder": "^21.4.0",
     "parse-ms": "^2.1.0"
   }
 }
