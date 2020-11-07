@@ -21,12 +21,10 @@ module.exports = {
             :negative_squared_cross_mark: OMG NVM I CHANGED MY MIND (or just wait a minute)
         `)
 
-        if (!player) return message.channel.send("smh there is no player in this server.");
         if (!player.queue) return message.channel.send("There is no queue to clear!");
         
         let filter = (reaction, user) => {
             reaction.emoji.name === `✅` || reaction.emoji.name === `❎` && user.id === call.message.author.id;
-            console.log(collected);
         }
 
         message.channel.send(embed)
@@ -38,14 +36,14 @@ module.exports = {
         try {
             message.awaitReactions(filter, { max: 1, time: 60000, errors: ['time'] })
             .then(collected => {
-                if (collected.name === `✅`) player.queue.clear();
-                else if (collected.name === `❎`) message.channel.send("Okie dokie, cancelled command!");
+                if (collected.emoji === `✅`) player.queue.clear();
+                else if (collected.emoji === `❎`) message.channel.send("Okie dokie, cancelled command!");
                 console.log(collected);
             })
 
         } catch(e) {
             message.channel.send("Oopsie whoopsies! Can't clear queue right now. Try again later :(");
-            reportError();
+            reportError(client, message.guild, e, "In clearQueue command: Cannot fetch reactions");
         } 
     }
 }

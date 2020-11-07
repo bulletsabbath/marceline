@@ -18,6 +18,9 @@ module.exports = {
                 \`pause\` - pauses the queue without getting rid of it
                 \`play\` - plays the song you want!
                 \`queue\` - shows the current queue
+                \`skip\` - skips the current song
+                \`stop\` - stops the queue completely and leaves
+
             `)
             .setFooter("footer go brr")
             message.channel.send(embed);

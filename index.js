@@ -7,7 +7,6 @@ const client = new Client({
 const embed = new MessageEmbed()
 .setColor("RANDOM")
 const Spotify = require("erela.js-spotify");
-const { config } = require("process");
 
 client.config = require("./config.json");
 client.commands = new Collection();
@@ -32,11 +31,10 @@ client.manager = new Manager({
         const guild = client.guilds.cache.get(id);
         if (guild) guild.shard.send(payload);
     },
-    /*plugins: [ new Spotify({
+    plugins: [ new Spotify({
         clientID: client.config.clientID,
         clientSecret: client.config.clientSecret
     })]
-    */
 })
 .on("nodeConnect", node => console.log(`Connected to node ${node.options.identifier}.`))
 .on("nodeError", (err) => {
