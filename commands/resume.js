@@ -1,8 +1,8 @@
 module.exports = {
-    name: "pause",
-    aliases: ["holup"],
-    description: "pauses the queue without getting rid of it",
-    run: async (client, message) => {
+    name: "resume",
+    aliases: ["goahead"],
+    description: "ok, u can go on now",
+    run: (client, message) => {
         const player = client.manager.players.get(message.guild.id);
         if (!player) return message.channel.send("There is no player in this guild!");
 
@@ -10,9 +10,9 @@ module.exports = {
 
         if (!channel) return message.channel.send("You need to be in a voice channel to use this command!");
         if (channel.id == player.voiceChannel.id) return message.channel.send("You need to be in the same voice channel as me!");
-        if (player.paused) return message.channel.send("The queue is already paused??");
+        if (!player.paused) return message.channel.send("The queue is already playing!");
         
-        player.pause(true);
-        message.channel.send("Paused the queue.");
+        player.pause(false);
+        message.channel.send("Resuming.");
     }
 }

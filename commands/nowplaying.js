@@ -4,7 +4,7 @@ const ms = require("parse-ms");
 module.exports = {
     name: "nowplaying",
     aliases: ["np", "current"],
-    description: "what is this song? i love it!",
+    description: "shows what is currently playing!",
     run: (client, message) => {
         const player = client.manager.players.get(message.guild.id);
         const embed = new MessageEmbed()
@@ -14,7 +14,7 @@ module.exports = {
         const song = player.queue.current;
 
         const time = ms(song.duration);
-        const duration = `${time.hours ? time.hours > 10 ? time.hours :  `0${time.hours}` : ""}${time.hours ? ":" : ""}${time.minutes ? time.minutes > 10 ? time.minutes : `0${time.minutes}` : "00"}:${time.seconds ? time.seconds > 10 ? time.seconds : `0${time.seconds}` : ""}`
+        const duration = `${time.hours ? time.hours > 10 ? time.hours :  `0${time.hours}` : ""}${time.hours ? ":" : ""}${time.minutes ? time.minutes >= 10 ? time.minutes : `0${time.minutes}` : "00"}:${time.seconds ? time.seconds > 10 ? time.seconds : `0${time.seconds}` : ""}`
 
         embed
         .setColor("RANDOM")

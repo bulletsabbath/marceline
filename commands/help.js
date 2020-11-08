@@ -1,9 +1,10 @@
 const { MessageEmbed } = require("discord.js")
+const { generate } = require("../utils/functions");
 
 module.exports = {
     name: "help",
     aliases: [],
-    description: "Helps you, duh!",
+    description: "shows this embed!",
     run: (client, message, args) => {
         const embed = new MessageEmbed()
         .setColor("RANDOM");
@@ -11,17 +12,7 @@ module.exports = {
         if (!args[0]) {
             embed
             //awful descriptions go BRRRRRRRRRRR
-            .setDescription(`
-                \`help\` - shows this embed!
-                \`ping\` - shows latency
-                \`nowplaying\` - learn what is currently playing!
-                \`pause\` - pauses the queue without getting rid of it
-                \`play\` - plays the song you want!
-                \`queue\` - shows the current queue
-                \`skip\` - skips the current song
-                \`stop\` - stops the queue completely and leaves
-
-            `)
+            .setDescription(generate())
             .setFooter("footer go brr")
             message.channel.send(embed);
         }
@@ -33,10 +24,9 @@ module.exports = {
             embed
             .setTitle(`${command.name}`)
             .setDescription(`
-            ;; - ***description*** - ,, ${command.description || "no ~~useless~~ description"}
-            ;; - ***aliases*** - ,, ${"test" || "none"}
+            ;; - ***description*** - ,, ${command.description || "no description"}
+            ;; - ***aliases*** - ,, ${command.aliases.join(", ") || "none"}
             `)
-            .setFooter("...and i put a whole bag of jellybeans up my ass")
             console.log(command);
             message.channel.send(embed);
         }

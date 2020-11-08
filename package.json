@@ -15,6 +15,7 @@
     "erela.js-spotify": "^1.2.0",
     "ksoft.js": "^3.1.4",
     "lyrics-finder": "^21.4.0",
+    "node-fetch": "^2.6.1",
     "parse-ms": "^2.1.0"
   }
 }

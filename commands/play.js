@@ -4,7 +4,7 @@ const { reportError } = require("../utils/functions");
 module.exports = {
     name: "play",
     aliases: ["p"],
-    description: "ya like jazz?",
+    description: "plays the song you want!",
     run: async (client, message, args) => {
         const { channel } = message.member.voice;
 
@@ -20,7 +20,6 @@ module.exports = {
             selfDeafen: true
         })
 
-        if (!args.length && !player.playing) return player.play();
         if (!args.length) return message.channel.send("You need to give me a URL or a query to search!");
 
         if (player.state !== "CONNECTED") player.connect();

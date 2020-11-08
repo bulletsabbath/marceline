@@ -56,7 +56,11 @@ client.manager = new Manager({
 
     channel.send(embed);
     setTimeout(() => player.destroy(), 60000);
-});
+})
+.on("playerMove", (player, oldChannel, newChannel) => {
+    if (!newChannel) player.destroy();
+    if (newChannel && oldChannel) player.voiceChannel = newChannel;
+})
 
 
 client.once("ready", () => {

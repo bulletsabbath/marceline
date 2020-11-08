@@ -1,7 +1,7 @@
 module.exports = {
     name: "skip",
     aliases: ["sk"],
-    description: "Jump! Land!!! YAYYY YOU LANDED ON THE NEXT SONG!!",
+    description: "skips the current song",
     run: async (client, message) => {
         const { channel } = message.member.voice; 
         const player = client.manager.players.get(message.guild.id);

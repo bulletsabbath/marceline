@@ -1,7 +1,7 @@
 module.exports = {
     name: "stop",
     aliases: [],
-    description: "Stops the queue completely",
+    description: "stops the queue completely and leaves",
     run: async (client, message) => {
         const player = client.manager.get(message.guild.id);
         if (!player) return message.channel.send("There is no player to stop.");

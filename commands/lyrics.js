@@ -7,11 +7,12 @@ module.exports = {
     aliases: ["ly"],
     description: "Leerixs",
     run: async (client, message) => {
-        const player = client.manager.get(message.guild.id);
+        const player = client.manager.players.get(message.guild.id);
+        if (!player) return message.channel.send("There is no player in this guild!");
+
         const req = player.queue.current;
 
         if (!req) return message.channel.send("There is no song playing in this guild!");
-        if (!player) return message.channel.send("There is no player in this guild!");
         
         let lyrics;
 

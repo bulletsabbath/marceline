@@ -1,22 +1,17 @@
 const { MessageEmbed } = require("discord.js");
-const { Player } = require("erela.js");
+const { embedify } = require("../utils/functions");
 
 module.exports = {
     name: "queue",
     aliases: ["q"],
-    description: "Quuee? Que? Q! Q-tips?? wazzafak is this and how do you pronounce it",
+    description: "shows the current queue",
     run: async (client, message) => {
+        const player = client.manager.get(message.guild.id);
+
+        if (!player) return message.channel.send("There is no player in this guild!");
+        if (!player.queue) return message.channel.send("There is no queue to show lol");
+
         let page = 0;
-        const embed = new MessageEmbed()
-        .setColor("RANDOM");
-
-        const player = client.manager.players.get(message.guild.id);
-        if (!player) return message.channel.send("There is no queue in this guild!");
-
-        if (player.queue.length <= 10) {
-
-        } else if (player.queue.length > 10) {
-            
-        }
+        const embeds = embedify(message, player.queue);
     }
 }
