@@ -24,7 +24,8 @@ module.exports = {
 
         for (let file of files) {
             const cmd = require(`../commands/${file}`);
-            commands.push(cmd);
+            if (file == "reload.js" || file == "eval.js") {}
+            else commands.push(cmd);
         }
 
         const cmds = commands.map((cmd) => `\`${cmd.name}\` - ${cmd.description}`).join("\n");
