@@ -32,6 +32,28 @@ module.exports = {
         return cmds;
 
     },
+    embedify(queue, page) {
+        let embeds = [];
+        console.log(queue);
+        if (!queue) return;
+        for (let i = 0; i < queue.length; i += 10) {
+            ++page;
+            let songArray = [];
+            let tracks = queue.slice(i, i+10);
+            let j = i;
+            for (let track of tracks) {
+                let msg = `${++j} - ${track.title}`;
+                songArray.push(msg);
+            }
+            let embed = new MessageEmbed()
+                .setColor("RANDOM")
+                .setDescription(`\`\`\`css
+${songArray.join("\n")}\`\`\``)
+                .setFooter(`Page ${page}/${Math.floor(queue.length / 10)}`)
+            embeds.push(embed);
+        }
+        return embeds;
+    },
     clean(text) {
         return text
             .replace(/`/g, '`' + String.fromCharCode(8203))

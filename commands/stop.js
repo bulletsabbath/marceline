@@ -12,6 +12,6 @@ module.exports = {
         if (channel.id !== player.voiceChannel) return message.channel.send("You are not in the same voice channel as me!");
 
         player.destroy();
-        message.channel.send("Stopped player and left voice channel!");
+        message.channel.send("Stopped the player and left channel!");
     }
 }

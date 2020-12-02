@@ -1,4 +1,9 @@
+# imagine
 config.json
+
 logs
 Lavalink.jar
+
 node_modules
+
+/.vs

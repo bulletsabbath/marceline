@@ -47,6 +47,8 @@ module.exports = {
                     reportError(client, message.guild, e, "In clearQueue command: Cannot collect reactions.");
                 }
             })
+
+            collector.on("end", () => {});
         })
     }
 }
