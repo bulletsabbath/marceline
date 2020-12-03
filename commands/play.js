@@ -39,6 +39,8 @@ module.exports = {
             return reportError(client, message.guild, e, `Play command: Couldn't search song: \`${search}\``);
         }
 
+        //client.timeout.set(player.guild, Date.now());
+
         switch (res.loadType) {
             case "NO_MATCHES":
                 if (!player.queue.current) {

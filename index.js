@@ -4,13 +4,12 @@ const fs = require("fs");
 const client = new Client({
     disableMentions: "everyone"
 });
-const embed = new MessageEmbed()
-.setColor("RANDOM")
 const Spotify = require("erela.js-spotify");
 
 client.config = require("./config.json");
 client.commands = new Collection();
 client.aliases = new Collection();
+//client.timeout = new Collection();
 
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 
@@ -55,10 +54,13 @@ client.manager = new Manager({
     .setFooter("24/7 is not available yet so whether you like it or not I'm leaving!")
 
     channel.send(embed);
-    setTimeout(() => player.destroy(), 60000);
+    setInterval(() => {
+        //if my theory is correct this will check every minute and see if theres a song playing
+        if (!player.queue.current) player.destroy();
+    }, 60000);
 })
 .on("playerMove", (player, oldChannel, newChannel) => {
-    if (!newChannel) player.destroy();
+    if (!newChannel) return player.destroy();
     if (newChannel && oldChannel) player.voiceChannel = newChannel;
 })
 
@@ -80,6 +82,30 @@ client.on("message", message => {
     const command = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase()));
     if (!command) return;
     command.run(client, message, args);
+
+    /*
+    //checks if theres a new song playing???
+    //no, it doesnt.
+    while (true) {
+        const player = client.manager.players.get(message.guild.id);
+
+        if (!player) return;
+
+        const now = Date.now();
+        const timestamp = client.timeout.get(message.guild.id);
+        const timeout = 60000;
+
+        if (timestamp) {
+            const timedout = timestamp + timeout;
+
+            if (now > timedout && !player.queue.current) {
+                player.destroy();
+                client.timeout.delete(message.guild.id);
+            }
+        }
+    }
+    */
 })
 
+//will it even reach here
 client.login(client.config.token);

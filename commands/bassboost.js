@@ -18,7 +18,8 @@ module.exports = {
         if (!channel) return message.channel.send("You need to be in a voice channel to use this command!");
 
         let level = "none";
-        if (!args.length || !levels[args[0]) return message.channel.send("Bass boost level must be one of the following: ``none``, ``low``, ``medium``, ``high``")
+
+        if (!args.length || !levels[args[0]]) return message.channel.send("Bass boost level must be one of the following: ``none``, ``low``, ``medium``, ``high``");
 
         level = args[0].toLowerCase();
 
