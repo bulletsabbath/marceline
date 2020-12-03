@@ -1,4 +1,4 @@
-# Abel
+# Marceline
 
 Open source music bot. Current code is not tested and may have little mistakes that I'd rather not have.
 
