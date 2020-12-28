@@ -1,4 +1,3 @@
-const { MessageEmbed } = require("discord.js");
 const { reportError } = require("../utils/functions");
 
 module.exports = {
@@ -11,13 +10,13 @@ module.exports = {
         if (!args.length) return message.channel.send("you dumbfuck give me a command to reload");
 
         let command = client.commands.get(args[0].toLowerCase()) || client.commands.get(client.aliases.get(args[0].toLowerCase()));
-        console.log(command);
         if (!command) return message.channel.send("there is no command like that fab, you out of all people should know that smh");
 
         try {
             delete require.cache[require.resolve(`./${command.name}.js`)];
-            client.commands.set(command.name, command);
-            client.aliases.set(command.aliases, command.name);
+            const newFile = require(`./${command.name}.js`);
+            client.commands.set(newFile.name, newFile);
+            client.aliases.set(newFile.aliases, newFile.name);
             message.channel.send("Successfully reloaded command");
         } catch(e) {
             message.channel.send("oopsie woopsies couldn't reload commandchecklogsformoreinfoBYEEEEEEEEEEEEEE");

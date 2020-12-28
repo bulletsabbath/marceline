@@ -1,6 +1,4 @@
-const { MessageEmbed } = require("discord.js");
-const lyricsFinder = require("lyrics-finder");
-const { reportError } = require("../utils/functions");
+const { lyricsify } = require("../utils/functions");
 
 module.exports = {
     name: "lyrics",
@@ -13,32 +11,44 @@ module.exports = {
         const req = player.queue.current;
 
         if (!req) return message.channel.send("There is no song playing in this guild!");
-        
-        let lyrics;
 
-        try {
-            lyrics = await lyricsFinder(req.title, req.author);
-            if (!lyrics) return message.channel.send(`No lyrics found for \`${req.title}\`!`);
-        } catch (e) {
-            message.channel.send("Couldn't find lyrics at this time! Try again later.");
-            reportError(client, message.guild, e, "In lyrics command: Couldn't search for lyrics");
-        }
+        let page = 0;
+        let lyrics = await lyricsify(client, message, req, page);
+        if (lyrics == null) return message.channel.send(`Couldn't find any lyrics for ${req.title}`);
 
-        if (lyrics >= 2048) {
-            lyrics = lyrics.split(" ");
-            let first = lyrics.slice(0, 200).join(" ");
-            let second = lyrics.slice(200, lyrics.length - 1).join(" ");
+        let msg = await message.channel.send(lyrics[page]);
 
-            let embed = new MessageEmbed()
-            .setColor("RANDOM")
-            .setTitle(`${req.title} by ${req.author}`)
-            .setDescription(first)
-    
-            let embed1 = new MessageEmbed()
-            .setColor("RANDOM")
-            .setDescription(second)
-            message.channel.send(embed);
-            message.channel.send(embed1);
-        }
+        await msg.react("??");
+        await msg.react("??");
+        await msg.react("??");
+
+        let filter = (reaction, user) => reaction.emoji.name === `??` || reaction.emoji.name === `??` || reaction.emoji.name === `??` && user.id === message.author.id;
+        const collector = msg.createReactionCollector(filter, { time: 30000 });
+
+        collector.on("collect", (reaction, user) => {
+            try {
+                if (reaction.emoji.name === "??" && embeds.length !== 1) {
+                    if (page - 1 >= 0) {
+                        --page;
+                        msg.edit("", embeds[page]);
+                    } else {
+                        page = embeds.length + 1;
+                        msg.edit("", embeds[page - 1]);
+                    }
+                } else if (reaction.emoji.name === "??" && embeds.length !== 1) {
+                    if (page + 1 < embeds.length) {
+                        ++page;
+                        msg.edit("", embeds[page]);
+                    } else {
+                        page = 1;
+                        msg.edit("", embeds[0]);
+                    }
+                } else if (reaction.emoji.name === "??") {
+                    msg.delete();
+                }
+            } catch (e) {
+                
+            }
+        })
     }
 }

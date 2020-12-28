@@ -12,9 +12,9 @@ module.exports = {
         if (player.queue.length == 1 || !player.queue.length) return message.channel.send("There is no queue to show lol");
 
         let page = 0;
-        const embeds = embedify(player.queue, page);
+        const embeds = embedify(client, player.queue, page);
 
-        const msg = await message.channel.send(embeds[page].setFooter(`Page ${page + 1}/${embeds.length}`));
+        const msg = await message.channel.send(embeds[page]);
 
         await msg.react("⏮️");
         await msg.react("⏭️");

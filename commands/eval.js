@@ -36,8 +36,8 @@ module.exports = {
                         const { key } = await response.json();
                         const parsed = url.parse(`https://hasteb.in/${key}.${format}`);
                         const embed = new MessageEmbed()
-                        .setColor("RANDOM")
-                        .setDescription(`Posted in hastebin because it was too long:\n\n ${parsed}`)
+                            .setColor(client.config.color)
+                            .setDescription(`Posted in hastebin because it was too long:\n\n ${parsed}`)
 
                         msg.edit("", embed);
                     } else {
@@ -46,11 +46,11 @@ module.exports = {
                         let second = result.slice(100, result.length - 1);
 
                         const embed = new MessageEmbed()
-                        .setColor("RANDOM")
-                        .setDescription(first)
+                            .setColor(client.config.color)
+                            .setDescription(first)
                         const embed1 = new MessageEmbed()
-                        .setColor("RANDOM")
-                        .setDescription(second)
+                            .setColor(client.config.color)
+                            .setDescription(second)
 
                         message.channel.send(embed);
                         message.channel.send(embed1);
@@ -59,19 +59,19 @@ module.exports = {
                 }
             } else {
                 const embed = new MessageEmbed()
-                .setColor("RANDOM")
-                .setDescription(`\`\`\`js
+                    .setColor(client.config.color)
+                    .setDescription(`\`\`\`js
                 ${result}
                 \`\`\``)
                 msg.edit("", embed);
             }
         } catch (e) {
             let embed = new MessageEmbed()
-            .setColor("RANDOM")
-            .setTitle("There has been an error!")
-            .setDescription(`\`\`\`js
-            ${e}
-            \`\`\``)
+                .setColor(client.config.color)
+                .setTitle("There has been an error!")
+                .setDescription(`\`\`\`js
+                    ${e}
+                \`\`\``)
             msg.edit(message.author, embed);
             throw new Error(e);
         }

@@ -1,6 +1,7 @@
 module.exports = {
     name: "loop",
     aliases: [],
+    description: "Loop the queue or the song",
     run: (client, message, args) => {
         const player = client.manager.players.get(message.guild.id);
 

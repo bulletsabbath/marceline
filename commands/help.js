@@ -7,13 +7,12 @@ module.exports = {
     description: "shows this embed!",
     run: (client, message, args) => {
         const embed = new MessageEmbed()
-        .setColor("RANDOM");
+        .setColor(client.config.color);
 
         if (!args[0]) {
             embed
-            //awful descriptions go BRRRRRRRRRRR
-            .setDescription(generate())
-            .setFooter("footer go brr")
+                .setDescription(generate())
+                .setFooter("footer go brr")
             message.channel.send(embed);
         }
 

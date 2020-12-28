@@ -5,11 +5,13 @@ const client = new Client({
     disableMentions: "everyone"
 });
 const Spotify = require("erela.js-spotify");
+const mongoose = require("mongoose");
+
+require("./utils/eventHandler")(client);
 
 client.config = require("./config.json");
 client.commands = new Collection();
 client.aliases = new Collection();
-//client.timeout = new Collection();
 
 const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
 
@@ -41,21 +43,21 @@ client.manager = new Manager({
 })
 .on("trackStart", (player, track) => {
     const embed = new MessageEmbed()
-    .setColor("RANDOM")
-    .setDescription(`Now playing: \`${track.title}\`, requested by \`${track.requester.tag}\`.`)
+        .setColor(client.config.color)
+        .setDescription(`Now playing: \`${track.title}\`, requested by \`${track.requester.tag}\`.`)
     const channel = client.channels.cache.get(player.textChannel);
     channel.send(embed);
 })
 .on("queueEnd", player => {
     const channel = client.channels.cache.get(player.textChannel);
     const embed = new MessageEmbed()
-    .setColor("RANDOM")
-    .setDescription("Queue has ended! I will leave the voice channel in a minute.")
-    .setFooter("24/7 is not available yet so whether you like it or not I'm leaving!")
+        .setColor(client.config.color)
+        .setDescription("Queue has ended! I will leave the voice channel in a minute.")
+        .setFooter("There is no 24/7 so I'm leaving lmao")
 
     channel.send(embed);
-    setInterval(() => {
-        //if my theory is correct this will check every minute and see if theres a song playing
+    setTimeout(() => {
+        if (player.guild == "768141715101843538") return;
         if (!player.queue.current) player.destroy();
     }, 60000);
 })
@@ -63,49 +65,19 @@ client.manager = new Manager({
     if (!newChannel) return player.destroy();
     if (newChannel && oldChannel) player.voiceChannel = newChannel;
 })
-
-
-client.once("ready", () => {
-    client.manager.init(client.user.id);
-    console.log("Ready to rock 'n roll!");
-    client.user.setStatus("idle");
-    setInterval(() => {
-        client.user.setActivity(`songs for ${client.manager.players.size} guild(s)!`);
-    }, 10000);
+.on("playerCreate", player => {
+    client.user.setActivity(`Playing songs in ${client.manager.players.size} guild${client.manager.players.size == 1 ? "" : "s"}!`);
+})
+.on("playerDestroy", player => {
+    client.user.setActivity(`Playing songs in ${client.manager.players.size} guild${client.manager.players.size == 1 ? "" : "s"}!`);
 })
 
-client.on("message", message => {
-    if (message.author.bot || !message.guild) return;
-    if (!message.content.startsWith(client.config.prefix)) return;
-    const [cmd, ...args] = message.content.slice(client.config.prefix.length).trim().split(/ +/g);
-    
-    const command = client.commands.get(cmd.toLowerCase()) || client.commands.get(client.aliases.get(cmd.toLowerCase()));
-    if (!command) return;
-    command.run(client, message, args);
+mongoose.connect(`mongodb+srv://admin:${client.config.dbPass}@cluster0.e4zxl.mongodb.net/marceline?retryWrites=true&w=majority`, { useNewUrlParser: true, useUnifiedTopology: true });
 
-    /*
-    //checks if theres a new song playing???
-    //no, it doesnt.
-    while (true) {
-        const player = client.manager.players.get(message.guild.id);
+const db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', () => {
+    console.log("connects to database cutely (without an e because i want to stabby stab myself)");
+});
 
-        if (!player) return;
-
-        const now = Date.now();
-        const timestamp = client.timeout.get(message.guild.id);
-        const timeout = 60000;
-
-        if (timestamp) {
-            const timedout = timestamp + timeout;
-
-            if (now > timedout && !player.queue.current) {
-                player.destroy();
-                client.timeout.delete(message.guild.id);
-            }
-        }
-    }
-    */
-})
-
-//will it even reach here
 client.login(client.config.token);

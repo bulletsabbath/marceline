@@ -12,15 +12,15 @@ module.exports = {
         if (!player.queue) return message.channel.send("There is no queue to clear!");
         
         const embed = new MessageEmbed()
-        .setColor("RANDOM")
-        .setDescription(`
-            Oh shit oh fuck are you sure? <:shake:772882367340871702>
+            .setColor(client.config.color)
+            .setDescription(`
+                Oh shit oh fuck are you sure? <:shake:772882367340871702>
 
-            Gotta warn you mate if you clear the queue you'll never get it back?
+                Gotta warn you mate, if you clear the queue you'll never get it back.
 
-            :white_check_mark: Clear it!
-            :negative_squared_cross_mark: OMG NVM I CHANGED MY MIND (or just wait a minute)
-        `)
+                :white_check_mark: Clear it!
+                :negative_squared_cross_mark: OMG NVM I CHANGED MY MIND (or just wait a minute)
+            `)
 
         message.channel.send(embed)
         .then(async msg => {

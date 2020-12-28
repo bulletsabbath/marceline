@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const { Player } = require("erela.js");
 const { reportError } = require("../utils/functions");
 
 module.exports = {
@@ -9,17 +10,18 @@ module.exports = {
         const { channel } = message.member.voice;
 
         const embed = new MessageEmbed()
-        .setColor("RANDOM");
+        .setColor(client.config.color);
         
         if (!channel) return message.channel.send("You need to be in the same voice channel as me!");
 
+        /**@type Player player of the guild */
         const player = client.manager.create({
             guild: message.guild.id,
             textChannel: message.channel.id,
             voiceChannel: channel.id,
-            selfDeafen: true
         })
 
+        if (!args.legnth && player.paused) return player.pause(false);
         if (!args.length) return message.channel.send("You need to give me a URL or a query to search!");
 
         if (player.state !== "CONNECTED") player.connect();
