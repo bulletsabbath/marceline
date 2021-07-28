@@ -18,16 +18,16 @@ module.exports = {
 
         let msg = await message.channel.send(lyrics[page]);
 
-        await msg.react("??");
-        await msg.react("??");
-        await msg.react("??");
+        await msg.react("⏮️");
+        await msg.react("⏭️");
+        await msg.react("⏹️");
 
-        let filter = (reaction, user) => reaction.emoji.name === `??` || reaction.emoji.name === `??` || reaction.emoji.name === `??` && user.id === message.author.id;
+        let filter = (reaction, user) => reaction.emoji.name === `⏮️` || reaction.emoji.name === `⏭️` || reaction.emoji.name === `⏹️` && user.id === message.author.id;
         const collector = msg.createReactionCollector(filter, { time: 30000 });
 
         collector.on("collect", (reaction, user) => {
             try {
-                if (reaction.emoji.name === "??" && embeds.length !== 1) {
+                if (reaction.emoji.name === "⏮️" && embeds.length > 1) {
                     if (page - 1 >= 0) {
                         --page;
                         msg.edit("", embeds[page]);
@@ -35,7 +35,7 @@ module.exports = {
                         page = embeds.length + 1;
                         msg.edit("", embeds[page - 1]);
                     }
-                } else if (reaction.emoji.name === "??" && embeds.length !== 1) {
+                } else if (reaction.emoji.name === "⏭️" && embeds.length > 1) {
                     if (page + 1 < embeds.length) {
                         ++page;
                         msg.edit("", embeds[page]);
@@ -43,7 +43,7 @@ module.exports = {
                         page = 1;
                         msg.edit("", embeds[0]);
                     }
-                } else if (reaction.emoji.name === "??") {
+                } else if (reaction.emoji.name === "⏹️") {
                     msg.delete();
                 }
             } catch (e) {
